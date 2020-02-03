@@ -7,28 +7,45 @@ const Feedback = props => {
   return <h1>give feedback</h1>;
 };
 
-const Total = ({ name, value }) => {
+const Statistic = ({ name, value }) => {
   return (
-    <div>
-      {name} {value}
-    </div>
+    <>
+      <tr>
+        <td>{name}</td>
+        <td>{value}</td>
+      </tr>
+    </>
   );
 };
 
 const Statistics = ({ good, neutral, bad }) => {
   const total = good + neutral + bad;
+  const avg = (good * 1 + neutral * 0 + bad * -1) / total;
+  const positive = (good / total) * 100;
+
+  if (total === 0) {
+    return <h1>No feedback given</h1>;
+  }
+
   return (
     <div>
-      <h1>Statistics</h1>
-      <Total name="good" value={good} />
-      <Total name="neutral" value={neutral} />
-      <Total name="bad" value={bad} />
-      <Total name="all" value={good + neutral + bad} />
-      <Total
-        name="average"
-        value={(good * 1 + neutral * 0 + bad * -1) / (good + neutral + bad)}
-      />
-      <Total name="positive" value={(good / (good + neutral + bad)) * 100} />
+      <table>
+        <thead>
+          <tr>
+            <td>
+              <h1>Statistics</h1>
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <Statistic name="good" value={good} />
+          <Statistic name="neutral" value={neutral} />
+          <Statistic name="bad" value={bad} />
+          <Statistic name="all" value={total} />
+          <Statistic name="average" value={avg} />
+          <Statistic name="positive" value={positive + "%"} />
+        </tbody>
+      </table>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-const Name = ({ name }) => {
-  return <div>{name}</div>;
+const Person = ({ name }) => {
+  return <div> {name} </div>;
 };
 
 const App = () => {
@@ -12,29 +12,40 @@ const App = () => {
     setNewName(event.target.value);
   };
 
-  const addName = event => {
+  const addPerson = event => {
     event.preventDefault();
-    const nameObject = {
-      key: newName
+    const newPerson = {
+      name: newName
     };
 
-    setPersons(persons.concat(nameObject));
-    setNewName("");
-    console.log(persons);
+    let index = persons.indexOf(newPerson);
+    if (index === -1) {
+      window.alert(`${newName} is already added to phonebook`);
+    } else {
+      setPersons(persons.concat(newPerson));
+      setNewName("");
+    }
   };
 
   const rows = () =>
-    persons.map(name => <Name key={name.content} id={name.id} />);
+    persons.map(person => <Person name={person.name} key={person.name} />);
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
-        <input value={newName} onChange={handleNameChange}></input>
-        <button type="submit">add</button>
+      <form onSubmit={addPerson}>
+        <div>
+          name: <input value={newName} onChange={handleNameChange} />
+        </div>
+        <div>
+          number: <input />
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
       </form>
       <h2>Numbers</h2>
-      <ul>{rows()}</ul>
+      <div>{rows()}</div>
     </div>
   );
 };

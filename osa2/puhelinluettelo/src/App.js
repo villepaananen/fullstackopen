@@ -18,12 +18,12 @@ const App = () => {
       name: newName
     };
 
-    let index = persons.indexOf(newPerson);
-    if (index === -1) {
-      window.alert(`${newName} is already added to phonebook`);
-    } else {
+    const matches = persons.filter(person => person.name === newPerson.name);
+    if (matches.length === 0) {
       setPersons(persons.concat(newPerson));
       setNewName("");
+    } else {
+      window.alert(`${newName} is already added to phonebook`);
     }
   };
 

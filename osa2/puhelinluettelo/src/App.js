@@ -1,21 +1,33 @@
 import React, { useState } from "react";
 
-const Person = ({ name }) => {
-  return <div> {name} </div>;
+const Person = ({ name, number }) => {
+  return (
+    <div>
+      {name} {number}
+    </div>
+  );
 };
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  const [persons, setPersons] = useState([
+    { name: "Arto Hellas", number: "040-1234567" }
+  ]);
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
 
   const handleNameChange = event => {
     setNewName(event.target.value);
   };
 
+  const handleNumberChange = event => {
+    setNewNumber(event.target.value);
+  };
+
   const addPerson = event => {
     event.preventDefault();
     const newPerson = {
-      name: newName
+      name: newName,
+      number: newNumber
     };
 
     const matches = persons.filter(person => person.name === newPerson.name);
@@ -28,7 +40,9 @@ const App = () => {
   };
 
   const rows = () =>
-    persons.map(person => <Person name={person.name} key={person.name} />);
+    persons.map(person => (
+      <Person name={person.name} key={person.name} number={person.number} />
+    ));
 
   return (
     <div>
@@ -38,7 +52,7 @@ const App = () => {
           name: <input value={newName} onChange={handleNameChange} />
         </div>
         <div>
-          number: <input />
+          number: <input value={newNumber} onChange={handleNumberChange} />
         </div>
         <div>
           <button type="submit">add</button>

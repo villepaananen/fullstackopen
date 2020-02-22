@@ -3,6 +3,7 @@ import axios from "axios";
 import { Filter } from "./components/Filter";
 import { Countries } from "./components/Countries";
 import "./App.css";
+require("dotenv").config();
 
 function App() {
   const [filter, setCountryFilter] = useState("");

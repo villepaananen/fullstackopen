@@ -1,5 +1,6 @@
 import React from "react";
 import { Country } from "./Country";
+import { Weather } from "./Weather";
 
 export const Countries = ({ countries, filter, handleShowCountry }) => {
   const rows = () => {
@@ -14,7 +15,12 @@ export const Countries = ({ countries, filter, handleShowCountry }) => {
         return "Too many matches, please specify another filter";
       }
       if (filtered.length === 1) {
-        return <Country country={filtered[0]} />;
+        return (
+          <div>
+            <Country country={filtered[0]} />
+            <Weather country={filtered[0]} />
+          </div>
+        );
       } else {
         return filtered.map(country => (
           <div key={country.name}>

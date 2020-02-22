@@ -1,7 +1,7 @@
 import React from "react";
 import { Country } from "./Country";
 
-export const Countries = ({ countries, filter }) => {
+export const Countries = ({ countries, filter, handleShowCountry }) => {
   const rows = () => {
     if (filter === "") {
       return "";
@@ -16,7 +16,14 @@ export const Countries = ({ countries, filter }) => {
       if (filtered.length === 1) {
         return <Country country={filtered[0]} />;
       } else {
-        return filtered.map(country => <div>{country.name}</div>);
+        return filtered.map(country => (
+          <div key={country.name}>
+            {country.name}
+            <button onClick={handleShowCountry} country={country.name}>
+              show
+            </button>
+          </div>
+        ));
       }
     }
   };

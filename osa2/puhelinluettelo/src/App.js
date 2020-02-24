@@ -20,6 +20,19 @@ const App = () => {
   const handleNumberChange = event => setNewNumber(event.target.value);
   const handleFilterChange = event => setNewFilter(event.target.value);
 
+  const handlePersonDelete = event => {
+    event.preventDefault();
+    const person = persons.find(p => p.name === event.target.name);
+    const result = window.confirm(
+      `Are you sure you want to delete ${person.name}?`
+    );
+    if (result) {
+      peopleService.remove(person.id).then(() => {
+        setPersons(persons.filter(p => p.name !== person.name));
+      });
+    }
+  };
+
   const handlePersonAdd = event => {
     event.preventDefault();
     const newPerson = {
@@ -52,7 +65,11 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter} />
+      <Persons
+        persons={persons}
+        filter={filter}
+        handlePersonDelete={handlePersonDelete}
+      />
     </div>
   );
 };

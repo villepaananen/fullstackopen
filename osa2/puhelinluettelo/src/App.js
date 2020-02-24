@@ -15,14 +15,6 @@ const App = () => {
   const handleNumberChange = event => setNewNumber(event.target.value);
   const handleFilterChange = event => setNewFilter(event.target.value);
 
-  useEffect(() => {
-    console.log("effect");
-    axios.get("http://localhost:3001/persons").then(response => {
-      console.log("promise fulfilled");
-      setPersons(response.data);
-    });
-  }, []);
-
   const handlePersonAdd = event => {
     event.preventDefault();
     const newPerson = {
@@ -32,13 +24,22 @@ const App = () => {
 
     const matches = persons.filter(person => person.name === newPerson.name);
     if (matches.length === 0) {
-      setPersons(persons.concat(newPerson));
-      setNewName("");
-      setNewNumber("");
+      axios.post("http://localhost:3001/persons", newPerson).then(response => {
+        setNewName("");
+        setNewNumber("");
+      });
     } else {
       window.alert(`${newPerson.name} is already added to phonebook`);
     }
   };
+
+  useEffect(() => {
+    console.log("effect");
+    axios.get("http://localhost:3001/persons").then(response => {
+      console.log("promise fulfilled");
+      setPersons(response.data);
+    });
+  }, []);
 
   return (
     <div>

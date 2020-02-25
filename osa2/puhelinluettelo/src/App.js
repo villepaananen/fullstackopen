@@ -10,7 +10,10 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setNewFilter] = useState("");
-  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [notification, setNotification] = useState({
+    message: null,
+    type: null
+  });
 
   useEffect(() => {
     peopleService.getAll().then(initialPeople => {
@@ -21,10 +24,11 @@ const App = () => {
   const handleNameChange = event => setNewName(event.target.value);
   const handleNumberChange = event => setNewNumber(event.target.value);
   const handleFilterChange = event => setNewFilter(event.target.value);
-  const handleNotification = message => {
-    setNotificationMessage(message);
+
+  const handleNotification = ({ message, type }) => {
+    setNotification({ message, type });
     setTimeout(() => {
-      setNotificationMessage(null);
+      setNotification({ message: null, type: null });
     }, 3000);
   };
 
@@ -41,12 +45,18 @@ const App = () => {
         .create(newPerson)
         .then(data => {
           setPersons(persons.concat(data));
-          handleNotification(`Added ${newPerson.name}.`);
+          handleNotification({
+            message: `Added ${newPerson.name}.`,
+            type: "notification"
+          });
           setNewName("");
           setNewNumber("");
         })
         .catch(error => {
-          handleNotification(`Person ${newPerson.name} couldn't be added.`);
+          handleNotification({
+            message: `Person ${newPerson.name} couldn't be added.`,
+            type: "error"
+          });
         });
     } else {
       const result = window.confirm(
@@ -62,16 +72,19 @@ const App = () => {
                 person.id !== matches[0].id ? person : returnedPerson
               )
             );
-            handleNotification(
-              `Updated ${newPerson.name} with number ${newPerson.number}.`
-            );
+            handleNotification({
+              message: `Updated ${newPerson.name} with number ${newPerson.number}.`,
+              type: "notification"
+            });
             setNewName("");
             setNewNumber("");
           })
           .catch(error => {
-            handleNotification(
-              `Person ${newPerson.name} was already removed from the server.`
-            );
+            handleNotification({
+              message: `Person ${newPerson.name} was already removed from the server.`,
+              type: "error"
+            });
+            setPersons(persons.filter(p => p.name !== newPerson.name));
           });
       }
     }
@@ -86,14 +99,19 @@ const App = () => {
     if (result) {
       peopleService
         .remove(person.id)
-        .then(() => {
+        .then(response => {
           setPersons(persons.filter(p => p.name !== person.name));
-          handleNotification(`Removed ${person.name}.`);
+          handleNotification({
+            message: `Removed ${person.name}.`,
+            type: "notification"
+          });
         })
         .catch(error => {
-          handleNotification(
-            `Person ${person.name} was already removed from the server.`
-          );
+          handleNotification({
+            message: `Person ${person.name} was already removed from the server.`,
+            type: "error"
+          });
+          setPersons(persons.filter(p => p.name !== person.name));
         });
     }
   };
@@ -101,7 +119,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification notificationMessage={notificationMessage} />
+      <Notification notification={notification} />
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h2>Add a new</h2>
       <PersonForm

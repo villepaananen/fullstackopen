@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Notification = ({ notificationMessage }) => {
+export const Notification = ({ notification }) => {
   const notificationStyle = {
     background: "Linen",
     color: "RoyalBlue",
@@ -14,13 +14,14 @@ export const Notification = ({ notificationMessage }) => {
     padding: 10
   };
 
-  if (notificationMessage === null) {
-    return null;
-  }
+  if (notification.message === null) return null;
+
+  if (notification.type === "error") notificationStyle.color = "Red";
+  else notificationStyle.color = "RoyalBlue";
 
   return (
     <div style={notificationStyle} className="notification">
-      {notificationMessage}
+      {notification.message}
     </div>
   );
 };
